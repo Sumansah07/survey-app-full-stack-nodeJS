@@ -97,12 +97,6 @@ npm run dev
 
 The application will be available at `http://localhost:5173`
 
-## Deployment
-
-### Vercel Deployment
-
-This application is ready to deploy on Vercel. See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
-
 **Quick Deploy:**
 
 1. Push code to GitHub
