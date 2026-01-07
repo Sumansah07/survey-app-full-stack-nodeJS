@@ -8,10 +8,28 @@ function TakeSurvey() {
   const [survey, setSurvey] = useState(null);
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [respondentInfo, setRespondentInfo] = useState({
+    name: '',
+    email: ''
+  });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     fetchSurvey();
+    checkLoginStatus();
   }, [id]);
+
+  const checkLoginStatus = () => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      const userData = JSON.parse(user);
+      setIsLoggedIn(true);
+      setRespondentInfo({
+        name: userData.name,
+        email: userData.email
+      });
+    }
+  };
 
   const fetchSurvey = async () => {
     try {
@@ -34,10 +52,19 @@ function TakeSurvey() {
         answer: answers[questionId]
       }));
 
-      await axios.post('/api/responses', {
+      const token = localStorage.getItem('token');
+      const responseData = {
         surveyId: id,
-        answers: formattedAnswers
-      });
+        answers: formattedAnswers,
+        respondentName: respondentInfo.name,
+        respondentEmail: respondentInfo.email
+      };
+
+      const config = token ? {
+        headers: { 'x-auth-token': token }
+      } : {};
+
+      await axios.post('/api/responses', responseData, config);
 
       setSubmitted(true);
       setTimeout(() => navigate('/'), 2000);
@@ -64,6 +91,40 @@ function TakeSurvey() {
       <p style={{ color: '#7f8c8d', marginBottom: '2rem' }}>{survey.description}</p>
 
       <form onSubmit={handleSubmit}>
+        {!isLoggedIn && (
+          <div className="card" style={{ background: 'rgba(15, 52, 96, 0.6)', marginBottom: '1.5rem', border: '1px solid rgba(0, 212, 255, 0.3)' }}>
+            <h3 style={{ marginBottom: '1rem', color: '#00d4ff' }}>Your Information</h3>
+            <div className="form-group">
+              <label>Name *</label>
+              <input
+                type="text"
+                value={respondentInfo.name}
+                onChange={(e) => setRespondentInfo({ ...respondentInfo, name: e.target.value })}
+                placeholder="Enter your name"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Email *</label>
+              <input
+                type="email"
+                value={respondentInfo.email}
+                onChange={(e) => setRespondentInfo({ ...respondentInfo, email: e.target.value })}
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+          </div>
+        )}
+
+        {isLoggedIn && (
+          <div className="card" style={{ background: 'rgba(81, 207, 102, 0.15)', marginBottom: '1.5rem', padding: '1rem', border: '1px solid rgba(81, 207, 102, 0.3)' }}>
+            <p style={{ margin: 0, color: '#51cf66', fontWeight: '600' }}>
+              ✓ Submitting as: <strong>{respondentInfo.name}</strong> ({respondentInfo.email})
+            </p>
+          </div>
+        )}
+
         {survey.questions.map((question, index) => (
           <div key={question._id} className="card">
             <h3>Question {index + 1}</h3>

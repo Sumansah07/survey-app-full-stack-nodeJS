@@ -10,10 +10,13 @@ function Analytics() {
   const { id } = useParams();
   const [analytics, setAnalytics] = useState(null);
   const [survey, setSurvey] = useState(null);
+  const [responses, setResponses] = useState([]);
+  const [showRespondents, setShowRespondents] = useState(false);
 
   useEffect(() => {
     fetchAnalytics();
     fetchSurvey();
+    fetchResponses();
   }, [id]);
 
   const fetchSurvey = async () => {
@@ -35,6 +38,18 @@ function Analytics() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAnalytics(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchResponses = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`/api/responses/survey/${id}`, {
+        headers: { 'x-auth-token': token }
+      });
+      setResponses(res.data);
     } catch (err) {
       console.error(err);
     }
@@ -70,6 +85,82 @@ function Analytics() {
           <h3>{survey.questions.length}</h3>
           <p>Questions</p>
         </div>
+      </div>
+
+      <div className="card">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2>Respondents</h2>
+          <button 
+            onClick={() => setShowRespondents(!showRespondents)}
+            className="btn btn-secondary"
+            style={{ fontSize: '14px', padding: '0.5rem 1rem' }}
+          >
+            {showRespondents ? 'Hide' : 'Show'} Respondents ({responses.length})
+          </button>
+        </div>
+        
+        {showRespondents && (
+          <div style={{ marginTop: '1rem' }}>
+            {responses.length === 0 ? (
+              <p style={{ color: '#7f8c8d' }}>No responses yet</p>
+            ) : (
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '2px solid rgba(0, 212, 255, 0.3)' }}>
+                      <th style={{ padding: '0.75rem', textAlign: 'left', color: '#00d4ff' }}>#</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left', color: '#00d4ff' }}>Name</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left', color: '#00d4ff' }}>Email</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left', color: '#00d4ff' }}>Submitted At</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left', color: '#00d4ff' }}>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {responses.map((response, index) => (
+                      <tr key={response._id} style={{ borderBottom: '1px solid rgba(0, 212, 255, 0.1)' }}>
+                        <td style={{ padding: '0.75rem', color: '#b0b0b0' }}>{index + 1}</td>
+                        <td style={{ padding: '0.75rem', color: '#e0e0e0' }}>
+                          {response.submittedBy?.name || response.respondentName || 'Anonymous'}
+                        </td>
+                        <td style={{ padding: '0.75rem', color: '#b0b0b0' }}>
+                          {response.submittedBy?.email || response.respondentEmail || 'N/A'}
+                        </td>
+                        <td style={{ padding: '0.75rem', color: '#b0b0b0' }}>
+                          {new Date(response.submittedAt).toLocaleString()}
+                        </td>
+                        <td style={{ padding: '0.75rem' }}>
+                          {response.submittedBy ? (
+                            <span style={{ 
+                              background: 'rgba(81, 207, 102, 0.2)', 
+                              color: '#51cf66', 
+                              padding: '0.25rem 0.5rem', 
+                              borderRadius: '4px',
+                              fontSize: '12px',
+                              border: '1px solid rgba(81, 207, 102, 0.3)'
+                            }}>
+                              Registered User
+                            </span>
+                          ) : (
+                            <span style={{ 
+                              background: 'rgba(255, 167, 38, 0.2)', 
+                              color: '#ffa726', 
+                              padding: '0.25rem 0.5rem', 
+                              borderRadius: '4px',
+                              fontSize: '12px',
+                              border: '1px solid rgba(255, 167, 38, 0.3)'
+                            }}>
+                              Guest
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {analytics.questions.map((question, index) => (

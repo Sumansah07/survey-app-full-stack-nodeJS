@@ -6,7 +6,25 @@ const auth = require('../middleware/auth');
 
 router.post('/', async (req, res) => {
   try {
-    const response = new Response(req.body);
+    const responseData = {
+      surveyId: req.body.surveyId,
+      answers: req.body.answers,
+      respondentName: req.body.respondentName,
+      respondentEmail: req.body.respondentEmail
+    };
+
+    // If user is logged in, add their user ID
+    if (req.header('x-auth-token')) {
+      const jwt = require('jsonwebtoken');
+      try {
+        const decoded = jwt.verify(req.header('x-auth-token'), process.env.JWT_SECRET || 'your-secret-key');
+        responseData.submittedBy = decoded.userId;
+      } catch (err) {
+        // Token invalid, continue without user ID
+      }
+    }
+
+    const response = new Response(responseData);
     await response.save();
     res.json(response);
   } catch (error) {
@@ -24,7 +42,9 @@ router.get('/survey/:surveyId', auth, async (req, res) => {
       return res.status(403).json({ message: 'Not authorized' });
     }
 
-    const responses = await Response.find({ surveyId: req.params.surveyId });
+    const responses = await Response.find({ surveyId: req.params.surveyId })
+      .populate('submittedBy', 'name email')
+      .sort({ submittedAt: -1 });
     res.json(responses);
   } catch (error) {
     res.status(500).json({ message: 'Server error' });

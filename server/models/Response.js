@@ -11,6 +11,16 @@ const responseSchema = new mongoose.Schema({
     ref: 'Survey',
     required: true
   },
+  submittedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  respondentEmail: {
+    type: String
+  },
+  respondentName: {
+    type: String
+  },
   answers: [answerSchema],
   submittedAt: {
     type: Date,
