@@ -1,5 +1,15 @@
 # Deployment Guide - Vercel
 
+## Important: Single Project Deployment
+
+**This is a monorepo setup - both frontend and backend deploy together in ONE Vercel project.**
+
+The `vercel.json` configuration handles:
+- Frontend (React) → Served as static files
+- Backend (Node.js/Express) → Runs as serverless functions on `/api/*` routes
+
+You do NOT need to deploy them separately!
+
 ## Prerequisites
 - GitHub account
 - Vercel account (sign up at vercel.com)
@@ -34,9 +44,9 @@ git push -u origin main
 4. Configure project:
    - **Framework Preset**: Other
    - **Root Directory**: ./
-   - **Build Command**: `cd client && npm install && npm run build && cd ../server && npm install`
-   - **Output Directory**: client/dist
-   - **Install Command**: `npm install`
+   - **Build Command**: Leave empty (vercel.json handles it)
+   - **Output Directory**: Leave empty (vercel.json handles it)
+   - **Install Command**: Leave empty (vercel.json handles it)
 
 5. Add Environment Variables:
    - Click "Environment Variables"
