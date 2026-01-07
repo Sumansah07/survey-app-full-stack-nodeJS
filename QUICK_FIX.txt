@@ -1,0 +1,35 @@
+🚨 QUICK FIX FOR 404 ERROR 🚨
+
+I've updated your code. Now do this:
+
+1. COMMIT AND PUSH:
+   git add .
+   git commit -m "Fix Vercel deployment configuration"
+   git push
+
+2. GO TO VERCEL DASHBOARD:
+   https://vercel.com/dashboard
+
+3. CLICK YOUR PROJECT:
+   survey-app-full-stack-node-js
+
+4. GO TO SETTINGS → GENERAL
+
+5. UPDATE BUILD SETTINGS:
+   Build Command: npm run vercel-build
+   Output Directory: client/dist
+   Install Command: npm install
+
+6. CLICK SAVE
+
+7. GO TO DEPLOYMENTS TAB
+
+8. CLICK "..." ON LATEST DEPLOYMENT → REDEPLOY
+
+9. UNCHECK "Use existing Build Cache"
+
+10. CLICK REDEPLOY
+
+WAIT 2-3 MINUTES AND YOUR APP WILL BE LIVE! ✅
+
+Your URL: https://survey-app-full-stack-node-js.vercel.app/
