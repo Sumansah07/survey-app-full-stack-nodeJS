@@ -99,19 +99,18 @@ The application will be available at `http://localhost:5173`
 
 ### Vercel Deployment
 
-1. Install Vercel CLI
-```bash
-npm i -g vercel
-```
+This application is ready to deploy on Vercel. See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
 
-2. Deploy
-```bash
-vercel
-```
+**Quick Deploy:**
 
-3. Set environment variables in Vercel dashboard:
-- MONGODB_URI
-- JWT_SECRET
+1. Push code to GitHub
+2. Import project in Vercel Dashboard
+3. Add environment variables:
+   - `MONGODB_URI` - Your MongoDB connection string
+   - `JWT_SECRET` - Secret key for JWT
+4. Deploy!
+
+For detailed step-by-step instructions, see [DEPLOYMENT.md](DEPLOYMENT.md)
 
 ## Usage
 
