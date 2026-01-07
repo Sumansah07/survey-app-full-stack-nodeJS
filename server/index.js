@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 
 dotenv.config();
 
@@ -14,9 +15,13 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/surveyapp
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/surveys', require('./routes/surveys'));
-app.use('/api/responses', require('./routes/responses'));
+const authRoutes = require('./routes/auth');
+const surveyRoutes = require('./routes/surveys');
+const responseRoutes = require('./routes/responses');
+
+app.use('/api/auth', authRoutes);
+app.use('/api/surveys', surveyRoutes);
+app.use('/api/responses', responseRoutes);
 
 const PORT = process.env.PORT || 5000;
 

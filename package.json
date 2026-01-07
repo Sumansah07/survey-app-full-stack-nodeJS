@@ -9,9 +9,17 @@
     "client": "cd client && npm run dev",
     "build": "cd client && npm install && npm run build",
     "start": "node server/index.js",
-    "vercel-build": "cd client && npm install && npm run build"
+    "vercel-build": "cd client && npm install && npm run build && cd ../server && npm install"
   },
   "keywords": ["survey", "feedback", "fullstack"],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
+  }
 }
