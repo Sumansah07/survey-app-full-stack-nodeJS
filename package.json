@@ -1,0 +1,16 @@
+{
+  "name": "survey-app",
+  "version": "1.0.0",
+  "description": "Survey and Feedback Application",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon server/index.js",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "node server/index.js"
+  },
+  "keywords": ["survey", "feedback", "fullstack"],
+  "author": "",
+  "license": "MIT"
+}
