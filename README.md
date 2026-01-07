@@ -2,6 +2,20 @@
 
 A full-stack survey and feedback application built with React, Node.js, Express, and MongoDB.
 
+## Screenshots
+
+### Home Page
+![Home Page](screenshots/home.png)
+
+### Create Survey
+![Create Survey](screenshots/create-survey.png)
+
+### Take Survey
+![Take Survey](screenshots/take-survey.png)
+
+### Analytics Dashboard
+![Analytics](screenshots/analytics.png)
+
 ## Features
 
 - User authentication with JWT
